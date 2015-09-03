@@ -17,7 +17,8 @@ The output is the performance measures (both error and time) for all methods ([G
 
 Launch:
 
-> python evaluate.py --filename=data/language-detection.csv --k=2 --services=mode
+> wget https://papiseval.s3.amazonaws.com/language.csv
+> python evaluate.py --filename=language.csv --k=2 --services=mode
 
 The output would be:
 
@@ -40,6 +41,36 @@ The output would be:
 
 At first it is recommended to only include "mode" as a service, as a check that the procedure runs correctly through the data you specified. You can try first with a small number of folds (2), with "bigml" (usually quicker) and then with "gpred". Then, it is standard practice to use k=10 folds for a proper evaluation.
 
+## Dataset format
+
+Datasets should be Comma Separated Values (CSV) files and they must have the following format:
+
+ * first line is a header, e.g.: column one,column two,column three
+ * each line corresponds to a data point / instance / example
+ * all columns correspond to input features, except the last column which is the output
+ * there are quotation marks around values when (and only when) they correspond to strings (i.e. they are categorical feature values or textual feature values)
+ * each line must end with a new line character (\n), not a carriage return and a new line (\r \n)
+ * the last line of the file is the last data point and must not be empty.
+
+Also, for usage with this repository's code, there should be no missing values.
+
+Note that having input features first then output in the last column is the format that BigML expects, but it differs from the Google Prediction API format where the output should be at the first column.
+
+### Example datasets
+
+Example datasets can be found in the _papiseval_ bucket on Amazon S3 — see https://papiseval.s3.amazonaws.com/
+
+It contains the following datasets:
+
+  * houses.csv:      houses data (regression): number of beds/baths, surface, type, price
+  * iris.csv:        iris flowers data (classification): petal/sepal length/width, species
+	* kaggle-give-me-credit.csv: [Kaggle “give me credit” challenge](https://www.kaggle.com/c/GiveMeSomeCredit) (binary classification)
+  * language.csv:    language data (classification): text, language
+  * movielens.csv:   movie ratings data (regression): user id, movie id, rating
+  * emails.csv:      emails data (classification): content features, sender-related features, importance
+  * @todo new data files: cover, diabetes
+
+
 ## Architecture of the evaluation code
 
 ### evaluate.py
@@ -58,7 +89,7 @@ This file contains a method called Gpred() which is used to create a Google Pred
 
 ### generic_kfold.py
 
-This file contains an abstract class, "Generic_Kfold", that implements all of the common methods for the k-fold cross-validation procedure. It also specifies the functions that need to be implemented in the concrete API classes (BigML_Kfold, Gpred_Kfold and Mode_Kfold). 
+This file contains an abstract class, "Generic_Kfold", that implements all of the common methods for the k-fold cross-validation procedure. It also specifies the functions that need to be implemented in the concrete API classes (BigML_Kfold, Gpred_Kfold and Mode_Kfold).
 
 ### mode_kfold.py
 
