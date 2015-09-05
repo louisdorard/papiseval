@@ -24,8 +24,9 @@ class GpredKfold(GenericKfold.GenericKfold):
     ## Method to reinitialize the api (after a long wait the access expires)
     # @param the pointer object
     def reinitialize_api(self):
-        from gpred import Gpred
-        self.api = Gpred()
+        import googleapiclient.gpred as gpred
+        oauth_file = %env GPRED_OAUTH_FILE
+        self.api = gpred.api(oauth_file)
 
     # upload_file is used to upload file on the google cloud storage
     #
@@ -86,7 +87,7 @@ class GpredKfold(GenericKfold.GenericKfold):
     # @param train the integer array of positions for the data used for training
     # @return a list containing the bucket name (to clean it at the end) and the model id
     def train_model(self, inputs, outputs, train):
-        # Create a file with the trained data 
+        # Create a file with the trained data
         filename = "data_train.csv"
         f = open("./data_train.csv", "w")
 
@@ -95,7 +96,7 @@ class GpredKfold(GenericKfold.GenericKfold):
             line = ",".join(np.insert(x0, 0, y0))
             f.write(line+"\n")
         f.close()
-        
+
         #We create a bucket and keep its name
         bucket_name = self.create_bucket()
 
@@ -105,8 +106,8 @@ class GpredKfold(GenericKfold.GenericKfold):
         body = {
                 "id": id,
                 "storageDataLocation": bucket_name+"/"+filename
-                }    
-        
+                }
+
         self.api.trainedmodels().insert(project = self.project_id,
                                    body = body).execute()
 
@@ -137,8 +138,8 @@ class GpredKfold(GenericKfold.GenericKfold):
     # @param inputs the inputs
     # @param test the integer array of positions for the data used for testing
     # @return a list of predictions for the test outputs given the test inputs
-    def make_predictions(self, model, inputs, test): 
-        
+    def make_predictions(self, model, inputs, test):
+
         predictions_list = []
 
         # Loop over the inputs in the test set to make predictions based on them
@@ -155,7 +156,7 @@ class GpredKfold(GenericKfold.GenericKfold):
             input_data = {
                           "input": {
                                     "csvInstance": data_list
-                                    } 
+                                    }
                           }
             try:
                 # Make prediction
@@ -178,10 +179,10 @@ class GpredKfold(GenericKfold.GenericKfold):
             else:
                 prediction = res['outputLabel']
                 predictions_list.append(prediction)
-        
+
         return predictions_list
 
-    ## Method to clean what has been created 
+    ## Method to clean what has been created
     # @param self the object pointer
     # @param objects the objects needed to clean: model and bucket (google prediction objects)
     def clean(self, objects):

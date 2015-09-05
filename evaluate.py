@@ -16,7 +16,7 @@ def helpmain():
             --filename :  the path where your .csv file containing your data is stored.
             --k :         the number of folds you want for the k-fold cross-validation.
             --services :  the services you want to use (gpred, bigml, mode).
-        
+
         For further information, you can check the README.md file in this folder.
         """)
 
@@ -28,7 +28,7 @@ def helpmain():
 def print_results(api_name, res, time, mode_res):
     """ Function to print the results of k-fold cross validations """
 
-    print "\n"+api_name+" "+str(k)+"-fold:"  
+    print "\n"+api_name+" "+str(k)+"-fold:"
     print "  Error :      {}".format(res[0])
     # if mode_res == 0 then we know we want to print res for Mode_Kfold
     if mode_res == 0:
@@ -60,7 +60,7 @@ if sys.argv == []:
 
 for arg in sys.argv:
     arg_type = arg.split("=", 1)[0]
-    
+
     if arg == "--help":
         helpmain()
         sys.exit()
@@ -109,7 +109,7 @@ if "mode" in services:
 #                   #
 
 if "bigml" in services:
-    
+
     # @review: only import if and where needed
     import BigmlKfold
     from bigml.api import BigML
@@ -130,7 +130,7 @@ if "bigml" in services:
 #                   #
 
 if "gpred" in services:
-    
+
     import GpredKfold
     from gpred import Gpred
 
@@ -138,7 +138,9 @@ if "gpred" in services:
     googleplus_project_id = os.environ['GPRED_PROJECT_ID']
 
     # we set up the gpred api
-    api = Gpred()
+    import googleapiclient.gpred as gpred
+    oauth_file = %env GPRED_OAUTH_FILE
+    api = gpred.api(oauth_file)
 
     obj2 = GpredKfold.GpredKfold(api)
 
