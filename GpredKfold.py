@@ -25,8 +25,7 @@ class GpredKfold(GenericKfold.GenericKfold):
     # @param the pointer object
     def reinitialize_api(self):
         import googleapiclient.gpred as gpred
-        oauth_file = %env GPRED_OAUTH_FILE
-        self.api = gpred.api(oauth_file)
+        self.api = gpred.api(os.environ['GPRED_OAUTH_FILE'])
 
     # upload_file is used to upload file on the google cloud storage
     #

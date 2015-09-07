@@ -139,8 +139,7 @@ if "gpred" in services:
 
     # we set up the gpred api
     import googleapiclient.gpred as gpred
-    oauth_file = %env GPRED_OAUTH_FILE
-    api = gpred.api(oauth_file)
+    api = gpred.api(os.environ['GPRED_OAUTH_FILE'])
 
     obj2 = GpredKfold.GpredKfold(api)
 

@@ -1,6 +1,8 @@
 # papiseval
 
-Evaluate Predictive APIs
+Evaluate Predictive APIs.
+
+This repository contains Python code to evaluate the performance (time and error) of BigML and Google Prediction API (Gpred) on a given dataset. Code should be run from [bml-base](http://www.github.com/louisdorard/bml-base) (easiest is with Terminal.com).”
 
 ## How to launch an evaluation
 
