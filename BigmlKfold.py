@@ -17,7 +17,7 @@ class BigmlKfold(GenericKfold.GenericKfold):
     # @param train the integer array of positions for the data used for training
     # @return a list containing the source, the dataset, the model (bigml objects) and the local model
     def train_model(self, inputs, outputs, train):
-        # Create a file with the trained data 
+        # Create a file with the trained data
         f = open("./data_train.csv", "w")
 
         for x0, y0 in zip(inputs[train],outputs[train]):
@@ -25,11 +25,11 @@ class BigmlKfold(GenericKfold.GenericKfold):
             line = ",".join(np.insert(x0, len(x0), y0))
             f.write(line+"\n")
         f.close()
-    
+
         # Use the training file created previously to train a BigML model
-        source = check_resource(self.api.create_source('./data_train.csv', 
+        source = check_resource(self.api.create_source('./data_train.csv',
                                                         {
-                                                        'term_analysis' : {"enabled": "false"},
+                                                        'term_analysis' : {"enabled": False},
                                                         'source_parser' : {"locale": "en-US"}
                                                         }), self.api.get_source)
         dataset = check_resource(self.api.create_dataset(source), self.api.get_dataset)
@@ -44,18 +44,18 @@ class BigmlKfold(GenericKfold.GenericKfold):
     # @param inputs the inputs
     # @param test the integer array of positions for the data used for testing
     # @return a list of predictions for the test outputs given the test inputs
-    def make_predictions(self, model, inputs, test): 
-        
+    def make_predictions(self, model, inputs, test):
+
         predictions_list = []
 
         # Loop over the inputs in the test set to make predictions based on them
         for x0 in inputs[test]:
-        
+
             # We build the input data for predictions
             input_data = {}
             for i in range(0, len(x0)):
                 input_data["field"+str(i+1)] = x0[i]
-           
+
             # Make prediction
             prediction = model.predict(input_data)
 
@@ -64,7 +64,7 @@ class BigmlKfold(GenericKfold.GenericKfold):
 
         return predictions_list
 
-    ## Method to clean what has been created 
+    ## Method to clean what has been created
     # @param self the object pointer
     # @param objects the objects needed to clean: source, dataset, model (bigml objects)
     def clean(self, objects):
