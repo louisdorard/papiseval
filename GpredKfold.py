@@ -7,6 +7,7 @@ import time
 import threading
 import numpy as np
 import boto
+import gcs_oauth2_boto_plugin
 import os
 from apiclient import http
 
