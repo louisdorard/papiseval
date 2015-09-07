@@ -132,7 +132,6 @@ if "bigml" in services:
 if "gpred" in services:
 
     import GpredKfold
-    from gpred import Gpred
 
     import os
     googleplus_project_id = os.environ['GPRED_PROJECT_ID']
