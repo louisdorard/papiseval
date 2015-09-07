@@ -5,8 +5,6 @@ import shutil
 import tempfile
 import time
 import threading
-from gslib.third_party.oauth2_plugin import oauth2_plugin
-from gslib.third_party.oauth2_plugin import oauth2_client
 import numpy as np
 import boto
 import os
@@ -35,8 +33,6 @@ class GpredKfold(GenericKfold.GenericKfold):
     #           bucket_name  the name of the bucket which will be used
     def upload_file(self, dir, filename, bucket_name):
 
-        oauth2_client.token_exchange_lock = threading.Lock()
-
         with open(os.path.join(dir, filename), 'r') as localfile:
 
             dst_uri = boto.storage_uri(bucket_name + '/' + filename, self.GOOGLE_STORAGE)
@@ -46,8 +42,6 @@ class GpredKfold(GenericKfold.GenericKfold):
     def create_bucket(self):
         now = time.time()
         BUCKET = 'training-%d' % now
-
-        oauth2_client.token_exchange_lock = threading.Lock()
 
         # Instantiate a BucketStorageUri object.
         uri = boto.storage_uri(BUCKET, self.GOOGLE_STORAGE)
@@ -69,8 +63,6 @@ class GpredKfold(GenericKfold.GenericKfold):
     #           bucket_name: the name of the bucket to delete
     #           project_id: the project id where the bucket to delete is
     def delete_bucket(self, bucket_name, project_id):
-
-        oauth2_client.token_exchange_lock = threading.Lock()
 
         uri = boto.storage_uri(bucket_name, self.GOOGLE_STORAGE)
         for obj in uri.get_bucket():
