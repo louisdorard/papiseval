@@ -136,8 +136,6 @@ class GpredKfold(GenericKfold.GenericKfold):
 
         # Loop over the inputs in the test set to make predictions based on them
         for x0 in inputs[test]:
-            self.counter += 1 #debug
-            print self.counter #debug
 
             # This list and dictionary will be used as predictions inputs
             input_data = {}
