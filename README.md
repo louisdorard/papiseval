@@ -19,8 +19,8 @@ The output is the performance measures (both error and time) for all methods ([G
 
 Launch:
 
-> wget https://papiseval.s3.amazonaws.com/language.csv
-> python evaluate.py --filename=language.csv --k=2 --services=mode
+> wget https://papiseval.s3.amazonaws.com/realtor-las-vegas.csv
+> python evaluate.py --filename=realtor-las-vegas.csv --k=2 --services=mode
 
 The output would be:
 
